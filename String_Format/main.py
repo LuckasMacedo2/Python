@@ -1,5 +1,7 @@
 from enumLang import LanguageDestiny
 from StringFormat import StringFormatSQL
+from CommentFormat import CommentFormat
+from CommentPersistence import CommentPersistence
 from tkinter import *
 from tkinter import messagebox
 import tkinter.scrolledtext as scrolledtext
@@ -40,19 +42,33 @@ def submitFunction():
     inputTxt = txt.get(1.0, "end-1c")
     
     inputOpc = opc.get()
+    inputOpcChk = opcChk.get()
 
-    if inputTxt == "":
+    commentPersistence = CommentPersistence()
+    comment = commentPersistence.loadObject()
+
+    if inputTxt == "" and not inputOpcChk:
         messagebox.showinfo(title='Info', message='Please inform the instruction')
     else:
         if inputOpc == LanguageDestiny.dotNet.value:
-            strFormat = StringFormatSQL(LanguageDestiny.dotNet.value)
+            
+            if not inputOpcChk:
+                strFormat = StringFormatSQL(LanguageDestiny.dotNet.value)
+                strSelect = strFormat.formatStringToOutputLang(inputTxt)
+            else:
+                strSelect = comment.getComment(LanguageDestiny.dotNet.value)
             clear()
-            txt.insert(INSERT, strFormat.formatStringToOutputLang(inputTxt))
+            txt.insert(INSERT, strSelect)
 
         elif inputOpc == LanguageDestiny.VB.value:
-            strFormat = StringFormatSQL(LanguageDestiny.VB.value)
+            if not inputOpcChk:
+                strFormat = StringFormatSQL(LanguageDestiny.VB.value)
+                strSelect = strFormat.formatStringToOutputLang(inputTxt)
+            else:
+                strSelect = comment.getComment(LanguageDestiny.VB.value)
+
             clear()
-            txt.insert(INSERT, strFormat.formatStringToOutputLang(inputTxt))
+            txt.insert(INSERT, strSelect)
         
         elif inputOpc == LanguageDestiny.upperSQL.value:
             strFormat = StringFormatSQL(LanguageDestiny.upperSQL.value)
@@ -90,6 +106,9 @@ Radiobutton(m, text='VB6', variable=opc, value=int(LanguageDestiny.VB.value), co
 Radiobutton(m, text='Upper SQL', variable=opc, value=int(LanguageDestiny.upperSQL.value), command=submitFunction).pack(anchor=W)
 Radiobutton(m, text='Format SQL', variable=opc, value=int(LanguageDestiny.formatSQL.value), command=submitFunction).pack(anchor=W)
 Radiobutton(m, text='Clear SQL', variable=opc, value=int(LanguageDestiny.clearLang.value), command=submitFunction).pack(anchor=W)
+
+opcChk = IntVar()
+Checkbutton(m, text='Comment',variable=opcChk, onvalue=1, offvalue=0).pack()
 
 Button(m, text='Clear', command=clear).pack(anchor=CENTER)
 Button(m, text='Copy', command=copy).pack(anchor=CENTER)

@@ -2,7 +2,7 @@ from enumLang import LanguageDestiny
 import re
 
 class StringFormatSQL:
-    def __init__(self, outputLang = LanguageDestiny.none) -> None:
+    def __init__(self, outputLang = LanguageDestiny.none.value) -> None:
         """ Objective    :  StringFormatSQL class constructor
             Parameter(s) : outputLang: output language for SQL statement
             Return       :
@@ -28,13 +28,14 @@ class StringFormatSQL:
             Return       : strOutput: string with formatted instruction
         """  
         lstStrInput = strInput.split('\n')
-        print(lstStrInput)
         strOutput = ""
         for strInp in lstStrInput:
-            print(">" + strInp + "<")
             strInp = self.removeCharToSQL(strInp)
-            
+             
             strOutput = f'{strOutput}\n{self.prefix}{strInp}{self.sufix}'
+
+        if self.sufix  == '" & vbCrLf & _':
+            strOutput = strOutput[:len(strOutput)-len('" & vbCrLf & _')+1]
         
         return strOutput[1:]
 
@@ -87,6 +88,5 @@ class StringFormatSQL:
         strOutput = ""
         for line in strSQL.split('\n'):
             strOutput +=  line.rstrip() + '\n'
-            print(strOutput)
 
         return strOutput[:-1]
