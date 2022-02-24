@@ -1,8 +1,0 @@
-"UPDATE teste teste" & vbCrLf & _
-"SET asd = 'ttt' AND st = 'asd'" & vbCrLf & _
-"WHERE 'asd' = 'ttt'"
-
-"UPDATE teste teste" & vbCrLf & _
-"SET asd = 'popio' AND st = 'asda'" & vbCrLf & _
-"WHERE 'asda' = 'popio'"
-
